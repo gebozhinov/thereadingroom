@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.5'
 	id 'io.spring.dependency-management' version '1.1.6'
+	id "org.openapi.generator" version "7.10.0"
 }
 
 group = 'bg.thereadingroom'
@@ -36,9 +37,56 @@ dependencies {
 	testImplementation 'org.testcontainers:postgresql'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+	// Openapi
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+	implementation 'org.openapitools:openapi-generator:7.10.0'
+
+	// Jackson
+	implementation 'com.sun.xml.bind:jaxb-impl:2.3.8'
+
+	// openAPI jackson extension (used by code generation)
+	implementation "org.openapitools:jackson-databind-nullable:0.2.6"
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.named('compileJava') {
+	dependsOn(tasks.openApiGenerate)
+}
+
+sourceSets.main.java.srcDir "${buildDir}/generate-resources/main/src/main/java"
+
+openApiGenerate {
+	generatorName = "java"
+	inputSpec = "$rootDir/src/main/resources/openapi.yml".toString()
+	outputDir = "$buildDir/generated".toString()
+	apiPackage = "bg.thereadingroom.web"
+	modelPackage = "bg.thereadingroom.model.dto"
+
+	enablePostProcessFile = true
+	skipOverwrite = false
+	modelNameSuffix = "DTO"
+
+
+	configOptions = [
+			java8               : "true",
+			dateLibrary         : "java8-localdatetime",
+			serializationLibrary: "jackson",
+			library             : "resttemplate",
+			useBeanValidation   : "true",
+			enableBuilderSupport: "true",
+			useJakartaEe        : "true",
+			useSpringBoot3      : "true",
+
+	]
+}
+
+sourceSets {
+	main {
+		java {
+			srcDirs += "$buildDir/generated/src/main/java"
+		}
+	}
 }
