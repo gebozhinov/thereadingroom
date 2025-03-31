@@ -25,12 +25,20 @@ repositories {
 }
 
 dependencies {
+	// Spring
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// DB
 	runtimeOnly 'org.postgresql:postgresql'
+
+	// Lombok
+	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	// Test containers
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
 	testImplementation 'org.testcontainers:junit-jupiter'
@@ -39,7 +47,6 @@ dependencies {
 
 	// Openapi
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
-	implementation 'org.openapitools:openapi-generator:7.10.0'
 
 	// Jackson
 	implementation 'com.sun.xml.bind:jaxb-impl:2.3.8'
@@ -56,32 +63,7 @@ tasks.named('compileJava') {
 	dependsOn(tasks.openApiGenerate)
 }
 
-sourceSets.main.java.srcDir "${buildDir}/generate-resources/main/src/main/java"
-
-openApiGenerate {
-	generatorName = "java"
-	inputSpec = "$rootDir/src/main/resources/openapi.yml".toString()
-	outputDir = "$buildDir/generated".toString()
-	apiPackage = "bg.thereadingroom.web"
-	modelPackage = "bg.thereadingroom.model.dto"
-
-	enablePostProcessFile = true
-	skipOverwrite = false
-	modelNameSuffix = "DTO"
-
-
-	configOptions = [
-			java8               : "true",
-			dateLibrary         : "java8-localdatetime",
-			serializationLibrary: "jackson",
-			library             : "resttemplate",
-			useBeanValidation   : "true",
-			enableBuilderSupport: "true",
-			useJakartaEe        : "true",
-			useSpringBoot3      : "true",
-
-	]
-}
+//sourceSets.main.java.srcDir "${buildDir}/generate-resources/main/src/main/java"
 
 sourceSets {
 	main {
@@ -89,4 +71,40 @@ sourceSets {
 			srcDirs += "$buildDir/generated/src/main/java"
 		}
 	}
+}
+
+openApiGenerate {
+	generatorName = "spring"
+	inputSpec = "$rootDir/src/main/resources/openapi.yml".toString()
+	outputDir = "$buildDir/generated".toString()
+	templateDir = "$rootDir/openapi".toString()
+	apiPackage = "bg.thereadingroom.web"
+	modelPackage = "bg.thereadingroom.model.dto"
+
+	enablePostProcessFile = true
+	skipOverwrite = false
+	modelNameSuffix = "DTO"
+
+	configOptions = [
+			delegatePattern               : "true",
+			async                         : "false",
+			useOptional                   : "true",
+			java8                         : "true",
+			dateLibrary                   : "java8",
+			serializationLibrary          : "jackson",
+			library                       : "spring-boot",
+			useBeanValidation             : "true",
+			interfaceOnly                 : "false",
+			serializableModel             : "true",
+			withXml                       : "false",
+			useTags                       : "true",
+			unhandledException            : "true",
+			additionalModelTypeAnnotations: "@lombok.Builder(setterPrefix = \"set\")",
+			useJakartaEe                  : "true",
+			useSpringBoot3                : "true"
+	]
+}
+
+springBoot {
+	mainClass = "bg.thereadingroom.ThereadingroomApplication"
 }
