@@ -50,6 +50,8 @@ components:
   schemas:
     ViewStore:
       type: object
+      required:
+        - id
       properties:
         id:
           type: integer
