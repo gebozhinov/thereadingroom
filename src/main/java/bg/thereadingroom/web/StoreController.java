@@ -4,8 +4,6 @@ import bg.thereadingroom.model.dto.ViewStoreDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
 public class StoreController implements StoreApiDelegate {
 

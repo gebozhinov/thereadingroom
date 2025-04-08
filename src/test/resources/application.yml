@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: test
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/booking-test
+    username: testUser
+    password: testPassword
+    driverClassName: org.postgresql.Driver
