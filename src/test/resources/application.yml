@@ -1,17 +1,8 @@
 spring:
   profiles:
     active: test
-  jpa:
-    database: POSTGRESQL
-    show-sql: true
-    hibernate:
-      ddl-auto: update
   datasource:
     url: jdbc:postgresql://localhost:5432/booking-test
     username: testUser
     password: testPassword
     driverClassName: org.postgresql.Driver
-  sql:
-    init:
-      mode: always
-      encoding: utf-8

@@ -55,6 +55,6 @@ public class BookControllerIntegrationTest extends IntegrationTestInit {
 
         List<BookEntity> all = bookRepository.findAll();
 
-        assertThat(all.size()).isEqualTo(4);
+        assertThat(all.size()).isEqualTo(3);
     }
 }
