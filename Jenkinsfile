@@ -1,8 +1,13 @@
 pipeline {
     agent any
+
+    triggers {
+        githubPush()
+    }
+
     tools {
-        jdk 'jdk21'
-        gradle 'gradle'
+        jdk 'JDK 21'
+        gradle 'Gradle 8.14'
     }
     stages {
         stage('Build') {
@@ -14,38 +19,38 @@ pipeline {
             }
         }
 
-        stage('Dependency Submission') {
-            when {
-                expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') }
-            }
-            steps {
-                script {
-                    sh './gradlew dependencyUpdates'
-                }
-            }
-        }
+//         stage('Dependency Submission') {
+//             when {
+//                 expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') }
+//             }
+//             steps {
+//                 script {
+//                     sh './gradlew dependencyUpdates'
+//                 }
+//             }
+//         }
 
-        stage('Approval') {
-            when {
-                expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') }
-            }
-            steps {
-                script {
-                    def approvers = ['gebozhinov']
-                    def approval = input(
-                        message: "PR requires developer approval",
-                        ok: "Submit",
-                        parameters: [
-                            choice(
-                                name: 'Approvers',
-                                choices: approvers.join('\n'),
-                                description: 'Select approving senior developer'
-                            )
-                        ]
-                    )
-                    echo "Approved by: ${approval}"
-                }
-            }
-        }
+//         stage('Approval') {
+//             when {
+//                 expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') }
+//             }
+//             steps {
+//                 script {
+//                     def approvers = ['gebozhinov']
+//                     def approval = input(
+//                         message: "PR requires developer approval",
+//                         ok: "Submit",
+//                         parameters: [
+//                             choice(
+//                                 name: 'Approvers',
+//                                 choices: approvers.join('\n'),
+//                                 description: 'Select approving senior developer'
+//                             )
+//                         ]
+//                     )
+//                     echo "Approved by: ${approval}"
+//                 }
+//             }
+//         }
     }
 }
