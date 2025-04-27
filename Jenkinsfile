@@ -4,6 +4,7 @@ pipeline {
     triggers {
         githubPush()
     }
+    
 
     tools {
         jdk 'JDK 21'
