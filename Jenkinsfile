@@ -19,16 +19,16 @@ pipeline {
             }
         }
 
-        stage('Dependency Submission') {
-            when {
-                expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') }
-            }
-            steps {
-                script {
-                    sh './gradlew dependencyUpdates'
-                }
-            }
-        }
+//         stage('Dependency Submission') {
+//             when {
+//                 expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') }
+//             }
+//             steps {
+//                 script {
+//                     sh './gradlew dependencyUpdates'
+//                 }
+//             }
+//         }
 
         stage('Approval') {
             when {
