@@ -20,9 +20,7 @@ pipeline {
             }
             steps {
                 script {
-                    // Requires dependency submission plugin or custom implementation
                     sh './gradlew dependencyUpdates'
-                    // Add dependency submission logic here
                 }
             }
         }
