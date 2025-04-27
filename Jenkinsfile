@@ -6,8 +6,8 @@ pipeline {
     }
 
     tools {
-        jdk 'jdk21'
-        gradle 'gradle'
+        jdk 'JDK 21'
+        gradle 'Gradle 8.14'
     }
     stages {
         stage('Build') {
