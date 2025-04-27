@@ -1,5 +1,10 @@
 pipeline {
     agent any
+
+    triggers {
+        githubPush()
+    }
+
     tools {
         jdk 'jdk21'
         gradle 'gradle'
